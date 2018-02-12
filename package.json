@@ -1,0 +1,16 @@
+{
+  "name": "@polymer/app-pouchdb",
+  "flat": true,
+  "version": "3.0.0",
+  "description": "Custom Elements for working with PouchDB.",
+  "contributors": [
+    "The Polymer Authors"
+  ],
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/PolymerElements/app-pouchdb",
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0-pre.1",
+    "@polymer/app-storage": "^3.0.0-pre.1"
+  },
+  "devDependencies": {}
+}

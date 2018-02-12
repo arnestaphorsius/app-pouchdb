@@ -36,11 +36,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="msapplication-TileColor" content="#9C27B0">
   <meta name="msapplication-TileImage" content="../../note-app-elements/images/icon-inverted-3x.png">
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../web-animations-js/web-animations-next.min.js"></script>
+  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
   <link rel="import" href="../../platinum-sw/platinum-sw-elements.html">
-  <link rel="import" href="../app-pouchdb-sync.html">
-  <link rel="import" href="note-app.html">
+  <script type="module" src="../app-pouchdb-sync.js"></script>
+  <script type="module" src="./note-app.js"></script>
 
   <style>
     body {
@@ -48,20 +48,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding: 0;
     }
   </style>
-  <script>
-    // Configure service worker cahcing for html assets
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('../sw-import.js').then(function (registration) {
-          // Registration was successful
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }).catch(function (err) {
-          // registration failed :(
-          console.log('ServiceWorker registration failed: ', err);
-        });
-      });
-    }
-  </script>
+  <script type="module">
+import '../app-pouchdb-sync.js';
+import './note-app.js';
+// Configure service worker cahcing for html assets
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('../sw-import.js').then(function (registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }).catch(function (err) {
+      // registration failed :(
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+</script>
 </head>
 <body unresolved>
 

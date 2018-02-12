@@ -14,60 +14,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>app-pouchdb-document tests</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <script>
-    window.addEventListener('WebComponentsReady', function() {
-      teardown(function() {
-        return new PouchDB('test-db').destroy();
-      });
+  <script type="module">
+import '../../../@polymer/promise-polyfill/promise-polyfill.js';
+import '../../../@polymer/test-fixture/test-fixture.js';
+import '../../../@polymer/app-storage/test/app-storage-compatibility-suite.js';
+import '../pouchdb.js';
+import '../app-pouchdb-document.js';
+import '../app-pouchdb-conflict-resolution.js';
+import { Base } from '../../../@polymer/polymer/polymer.js';
+teardown(function() {
+  return new PouchDB('test-db').destroy();
+});
 
-      var ua = navigator.userAgent;
-      var isSafari9 = ua.match(/.+Version\/9.+Safari\/((601)|(537))/g);
+var ua = navigator.userAgent;
+var isSafari9 = ua.match(/.+Version\/9.+Safari\/((601)|(537))/g);
 
-      suite('app-pouchdb tests', function() {
+suite('app-pouchdb tests', function() {
 
-        // PouchDB fails in Safari 9 due to a buggy implementation of websql and
-        // loading in WCT. Cannot nicely feature detect for failure due to the
-        // asynchonous behavior of the error.
-        if (isSafari9) {
-          test('Tests Skipped');
+  // PouchDB fails in Safari 9 due to a buggy implementation of websql and
+  // loading in WCT. Cannot nicely feature detect for failure due to the
+  // asynchonous behavior of the error.
+  if (isSafari9) {
+    test('Tests Skipped');
 
-        } else {
-          testAppStorageDocumentCompatibility({
-            tagName: 'app-pouchdb-document',
-            awaitUpdate: function(element) {
-              return new Promise(function(resolve) {
-                element.changes.on('change', function onChange() {
-                  element.changes.removeListener('change', onChange);
-                  Polymer.Base.async(resolve, 100);
-                });
-              });
-            },
-            fetchStoredValue: function(storagePath, element) {
-              return new PouchDB('test-db').get(element.docId).then(function(doc) {
-                return Polymer.Base.get(storagePath, {
-                  data: doc
-                });
-              });
-            },
-            unsetValue: function(storage) {
-              storage.set('data._deleted', true);
-              return storage.transactionsComplete;
-            }
+  } else {
+    testAppStorageDocumentCompatibility({
+      tagName: 'app-pouchdb-document',
+      awaitUpdate: function(element) {
+        return new Promise(function(resolve) {
+          element.changes.on('change', function onChange() {
+            element.changes.removeListener('change', onChange);
+            Base.async(resolve, 100);
           });
-        }
-      });
+        });
+      },
+      fetchStoredValue: function(storagePath, element) {
+        return new PouchDB('test-db').get(element.docId).then(function(doc) {
+          return Base.get(storagePath, {
+            data: doc
+          });
+        });
+      },
+      unsetValue: function(storage) {
+        storage.set('data._deleted', true);
+        return storage.transactionsComplete;
+      }
     });
-  </script>
+  }
+});
+</script>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../web-component-tester/browser.js"></script>
 
-  <link rel="import" href="../../promise-polyfill/promise-polyfill.html">
-  <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../../app-storage/test/app-storage-compatibility-suite.html">
-  <link rel="import" href="../pouchdb.html">
-  <link rel="import" href="../app-pouchdb-document.html">
-  <link rel="import" href="../app-pouchdb-conflict-resolution.html">
+  <script type="module" src="../../../@polymer/promise-polyfill/promise-polyfill.js"></script>
+  <script type="module" src="../../../@polymer/test-fixture/test-fixture.js"></script>
+  <script type="module" src="../../../@polymer/app-storage/test/app-storage-compatibility-suite.js"></script>
+  <script type="module" src="../pouchdb.js"></script>
+  <script type="module" src="../app-pouchdb-document.js"></script>
+  <script type="module" src="../app-pouchdb-conflict-resolution.js"></script>
 </head>
 <body>
 
